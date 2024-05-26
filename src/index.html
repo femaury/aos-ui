@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AO Process</title>
+    <!-- Inline CSS -->
+    <style>
+      body {
+        background-color: #151720;
+        color: #e9ebf8;
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+          sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      }
+
+      main {
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+
+      #loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1;
+      }
+
+      #not-found-form {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        padding: 20px;
+      }
+
+      #not-found-form label {
+        display: block;
+        width: 100%;
+      }
+
+      #not-found-form input {
+        background-color: #1b1e29;
+        color: #e9ebf8;
+        border: none;
+        font-size: 16px;
+        align-self: stretch;
+        padding: 8px 12px;
+        outline: none;
+        margin: 12px 0;
+      }
+
+      #process-ui {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+
+      #console {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        padding: 0 20px 32px 20px;
+      }
+
+      #console-output div {
+        margin-bottom: 4px;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      #console-header {
+        position: sticky;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 20px;
+        backdrop-filter: blur(24px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      #console-header h1 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      #console-input-form {
+        flex-shrink: 0;
+      }
+
+      #console-input-prompt {
+        flex-shrink: 0;
+      }
+
+      #console-input {
+        background-color: transparent;
+        color: #e9ebf8;
+        border: none;
+        outline: none;
+        font-size: 16px;
+        flex-grow: 1;
+      }
+
+      #console-input-loader {
+        height: 20px;
+        color: #686767;
+      }
+
+      #console-input-loader > div.loader-small {
+        margin-right: 8px;
+        --_g: no-repeat radial-gradient(farthest-side, #f3f99c 90%, #f3f99c);
+      }
+
+      .status {
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+      }
+
+      .status > div {
+        margin-left: 8px;
+      }
+
+      .status-connected {
+        color: #5ddd71;
+      }
+
+      .status-unresponsive {
+        color: #fb4666;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .flex {
+        display: flex;
+      }
+
+      .flex-col {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .items-center {
+        align-items: center;
+      }
+
+      /* ANSI COLORS */
+
+      .ansi-black-fg {
+        color: #000000;
+      }
+
+      .ansi-red-fg {
+        color: #fb4666;
+      }
+
+      .ansi-green-fg {
+        color: #5ddd71;
+      }
+
+      .ansi-yellow-fg {
+        color: #f3f99c;
+      }
+
+      .ansi-blue-fg {
+        color: #57c7fe;
+      }
+
+      .ansi-magenta-fg {
+        color: #ff69c0;
+      }
+
+      .ansi-cyan-fg {
+        color: #9aecfe;
+      }
+
+      .ansi-white-fg {
+        color: #e9ebf8;
+      }
+
+      .ansi-bright-black-fg {
+        color: #686767;
+      }
+
+      .ansi-bright-red-fg {
+        color: #fb4666;
+      }
+
+      .ansi-bright-green-fg {
+        color: #5ddd71;
+      }
+
+      .ansi-bright-yellow-fg {
+        color: #f3f99c;
+      }
+
+      .ansi-bright-blue-fg {
+        color: #57c7fe;
+      }
+
+      .ansi-bright-magenta-fg {
+        color: #ff69c0;
+      }
+
+      .ansi-bright-cyan-fg {
+        color: #9aecfe;
+      }
+
+      .ansi-bright-white-fg {
+        color: #ffffff;
+      }
+
+      /* Animations */
+
+      .pulser {
+        width: 12px;
+        height: 12px;
+        aspect-ratio: 1/1;
+        border-radius: 6px;
+        background: #5ddd71;
+        box-shadow: 0 0 0 0 #5ddd7055;
+        animation: l1 1s infinite;
+      }
+      @keyframes l1 {
+        100% {
+          box-shadow: 0 0 0 4px #5ddd7028;
+        }
+      }
+
+      .loader {
+        width: 32px;
+        aspect-ratio: 1;
+        --_g: no-repeat radial-gradient(farthest-side, #fff 90%, #ffff);
+        background: var(--_g), var(--_g), var(--_g), var(--_g);
+        background-size: 40% 40%;
+        animation: l46 1s infinite;
+      }
+      .loader-small {
+        width: 16px;
+        aspect-ratio: 1;
+        --_g: no-repeat radial-gradient(farthest-side, #fff 90%, #ffff);
+        background: var(--_g), var(--_g), var(--_g), var(--_g);
+        background-size: 40% 40%;
+        animation: l46 1s infinite;
+      }
+      @keyframes l46 {
+        0% {
+          background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+        }
+        40%,
+        50% {
+          background-position: 100% 100%, 100% 0, 0 0, 0 100%;
+        }
+        90%,
+        100% {
+          background-position: 100% 100%, 0 100%, 0 0, 100% 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <!-- MARK: Loading -->
+      <div id="loading">
+        <div class="loader"></div>
+      </div>
+      <!-- MARK: Not Found Form -->
+      <form id="not-found-form" class="hidden">
+        <label>Couldn't find this process. Please manually enter process ID:</label>
+        <input id="process-id-input" type="text" required minlength="43" maxlength="43" />
+        <button>Submit</button>
+      </form>
+
+      <!-- MARK: Process UI -->
+      <div id="process-ui" class="hidden">
+        <div id="console-header">
+          <div class="flex-col">
+            <div class="flex items-center">
+              <span>AO Process&nbsp;</span>
+              <h1 id="process-id"></h1>
+            </div>
+
+            <div id="process-status-connected" class="status status-connected">
+              Connected
+              <div class="pulser"></div>
+            </div>
+            <div id="process-status-unresponsive" class="status status-unresponsive hidden">
+              Unresponsive
+            </div>
+          </div>
+
+          <div>
+            <div id="wallet-loader" class="loader-small"></div>
+            <button id="wallet-connect-button" class="hidden">Connect</button>
+            <div id="wallet-address" class="hidden"></div>
+          </div>
+        </div>
+        <div id="console">
+          <div id="console-output"></div>
+          <form id="console-input-form" class="flex items-center hidden" autocomplete="off">
+            <span id="console-input-prompt">aos>&nbsp;</span>
+            <input id="console-input" type="text" autofocus="true" autocomplete="off" />
+          </form>
+          <div id="console-input-loader" class="flex items-center hidden">
+            <div class="loader-small"></div>
+            <span id="console-input-loader-message">[Sending message]</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="https://arweave.net/ieyBokEqPnvy6-ChGsNJAajouJHu4brg4Z7pKI6qOwI"></script>
+    <!-- <script src="dist/index.js"></script> -->
+  </body>
+</html>
