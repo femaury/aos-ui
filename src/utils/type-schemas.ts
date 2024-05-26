@@ -1,8 +1,10 @@
 import { object, array, string, number, boolean, unknown, optional, union } from "valibot";
 
 export const resultSchema = object({
+  Error: optional(string()),
   Output: union([
     array(unknown()),
+    string(),
     object({
       data: union([
         string(),

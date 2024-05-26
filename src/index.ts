@@ -5,6 +5,7 @@ import { cuResultsSchema } from "./utils/type-schemas";
 import { setProcessId, setProcessOwner } from "./utils/storage";
 
 import "./messaging";
+import "./load-lua";
 
 const ansiUp = new AnsiUp();
 ansiUp.use_classes = true;
@@ -37,7 +38,7 @@ async function readResults(processId: string) {
         // TODO: Check if Output array can be non empty
         return;
       }
-      if (!edge.node.Output.print) return;
+      if (typeof edge.node.Output !== "object" || !edge.node.Output.print) return;
 
       const outputData = edge.node.Output.data;
       const output = typeof outputData === "string" ? outputData : outputData.output;
