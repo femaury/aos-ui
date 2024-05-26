@@ -6,10 +6,14 @@ To install dependencies:
 bun install
 ```
 
-To run:
+To build JS file:
 
 ```bash
-bun run index.ts
+bun build ./src/index.ts --outdir ./src/dist
 ```
 
-This project was created using `bun init` in bun v1.0.7. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+You need to serve the `index.html` file from a server to be able to use arconnect.
+You can use [live-server](https://www.npmjs.com/package/live-server) for that when developing.
+
+I upload the JS file to arweave separately and update the URL in the `index.html` file.
+The HTML file is then added as the data when spawning a process.
