@@ -6,6 +6,7 @@ import { getProcessId } from "./storage";
 import { createDataItemSigner } from "./signer";
 
 const ansiUp = new AnsiUp();
+ansiUp.use_classes = true;
 const consoleOutput = document.getElementById("console-output") as HTMLDivElement;
 
 async function readResult(messageId: string, processId: string) {
