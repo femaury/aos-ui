@@ -5,7 +5,7 @@ import { cuResultsSchema } from "./utils/type-schemas";
 import { setProcessId, setProcessOwner } from "./utils/storage";
 
 import "./messaging";
-import "./load-lua";
+import "./utils/load-lua";
 
 const ansiUp = new AnsiUp();
 ansiUp.use_classes = true;

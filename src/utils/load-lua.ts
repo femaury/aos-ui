@@ -1,5 +1,5 @@
-import { DOMUpdates } from "./utils/dom-updates";
-import { sendMessage } from "./utils/message";
+import { DOMUpdates } from "./dom-updates";
+import { sendMessage } from "./message";
 
 const fileInput = document.getElementById("lua-file-input") as HTMLInputElement;
 
