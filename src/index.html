@@ -46,7 +46,8 @@
       #not-found-form input {
         background-color: #1b1e29;
         color: #e9ebf8;
-        border: none;
+        border: 1px solid #686767;
+        border-radius: 4px;
         font-size: 16px;
         align-self: stretch;
         padding: 8px 12px;
@@ -154,6 +155,17 @@
 
       .items-center {
         align-items: center;
+      }
+
+      button {
+        background-color: #e9ebf8;
+        color: #151720;
+        border: none;
+        padding: 8px 16px;
+        font-size: 16px;
+        outline: none;
+        border-radius: 9999px;
+        cursor: pointer;
       }
 
       /* ANSI COLORS */
@@ -307,7 +319,7 @@
           <div>
             <div id="wallet-loader" class="loader-small"></div>
             <button id="wallet-connect-button" class="hidden">Connect</button>
-            <div id="wallet-address" class="hidden"></div>
+            <button id="wallet-address" class="hidden"></button>
           </div>
         </div>
         <div id="console">
@@ -324,7 +336,7 @@
       </div>
     </main>
 
-    <!-- <script src="https://arweave.net/ieyBokEqPnvy6-ChGsNJAajouJHu4brg4Z7pKI6qOwI"></script> -->
+    <!-- <script src="https://arweave.net/4P5GNewlh5DTMTlBZMRRu_4Iwjv9Khf5lx8jZqTFICc"></script> -->
     <script src="dist/index.js"></script>
   </body>
 </html>
