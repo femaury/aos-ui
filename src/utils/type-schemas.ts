@@ -1,4 +1,15 @@
-import { object, array, string, number, boolean, unknown, optional, union } from "valibot";
+import {
+  object,
+  array,
+  string,
+  number,
+  boolean,
+  unknown,
+  optional,
+  union,
+  BaseSchema,
+  nullable,
+} from "valibot";
 
 export const resultSchema = object({
   Error: optional(string()),
@@ -62,18 +73,37 @@ export const arweaveTransactionSchema = object({
   }),
 });
 
-export const arweaveTransactionsQuerySchema = object({
-  data: object({
-    transactions: object({
-      pageInfo: object({
-        hasNextPage: boolean(),
+function makeArweaveTxPaginationSchema<T extends BaseSchema>(schema: T) {
+  return object({
+    data: object({
+      transactions: object({
+        pageInfo: object({
+          hasNextPage: boolean(),
+        }),
+        edges: array(
+          object({
+            cursor: string(),
+            node: schema,
+          })
+        ),
       }),
-      edges: array(
-        object({
-          cursor: string(),
-          node: arweaveTransactionSchema,
-        })
-      ),
     }),
-  }),
-});
+  });
+}
+
+export const aoProcessTransactionsQuerySchema = makeArweaveTxPaginationSchema(
+  object({
+    id: string(),
+    owner: object({
+      address: string(),
+    }),
+    tags: array(arweaveTagsSchema),
+    data: object({
+      type: nullable(string()),
+      size: string(),
+    }),
+  })
+);
+
+export const arweaveTransactionsQuerySchema =
+  makeArweaveTxPaginationSchema(arweaveTransactionSchema);

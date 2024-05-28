@@ -1,3 +1,4 @@
+import { getAllProcesses } from "./processes";
 import { getActiveAddress, connect, afterInstall } from "./utils/arconnect";
 import { DOMUpdates } from "./utils/dom-updates";
 import { sendMessage } from "./utils/message";
@@ -28,6 +29,8 @@ async function checkAuth() {
       if (activeAddress === processOwner) {
         DOMUpdates.showPrompt();
       }
+
+      getAllProcesses(activeAddress);
     } else {
       // User is not authenticated
       DOMUpdates.showButton();
